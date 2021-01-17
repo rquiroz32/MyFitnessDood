@@ -39,6 +39,8 @@ router.get('/api/workouts', function (req, res) {
         }
     });
 
+    
+
 });
 
 // router.get('/api/workouts', function(req,res){
@@ -72,20 +74,22 @@ router.put('/api/workouts/:id', function (req, res) {
     const id = req.params.id
     console.log(JSON.stringify(workout))
     console.log(id)
-    db.workouts.findByIdAndUpdate({},(err,data)=>{
-        if(err) {
-            console.log("the error is: " + err)
-        } else{
-            console.log(data)
-        }
-    });
-    // db.workouts.findByIdAndUpdate({ _id: mongojs.ObjectID(id) }, { workout }, { new: true }, (err, data) => {
-    //     if (err) {
-    //         console.log("Database Error: " + err)
-    //     } else {
-    //         res.json(data)
+    // db.workouts.findByIdAndUpdate({},(err,data)=>{
+    //     if(err) {
+    //         console.log("the error is: " + err)
+    //     } else{
+    //         console.log(data)
     //     }
-    // })       
+    // });
+    db.workouts.findByIdAndUpdate({ _id: mongojs.ObjectID(id) }, { workout }, { new: true }, (err, data) => {
+        if (err) {
+            console.log("Database Error: " + err)
+        } else {
+            res.json(data)
+        }
+    })       
+    
+ 
     
 });
 
