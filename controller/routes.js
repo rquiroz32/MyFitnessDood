@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path')
-const mongojs = require('mongojs')
+const mongoose = require('mongoose')
 
-const databaseUrl = "workout"
-const collections = ["workouts"]
-const db = mongojs(databaseUrl, collections);
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
 
-db.on("error", error => {
-    console.log("Database Error:", error);
-});
+const db = require("../models");
+
+
+
 
 /////// BEGIN HTML ROUTES //////////
 
@@ -30,43 +29,58 @@ router.get('/stats', function (req, res) {
 
 router.get('/api/workouts', function (req, res) {
 
-    db.workouts.find({}, (err, data) => {
+    db.Workout.aggregate( [
+        {
+          $addFields: {
+            totalDuration: { 
+                $sum: "$exercises.duration"
+             } 
+          }
+        }
+     ] ).exec((err,result)=>{
+         if(err){
+             console.log("Error during data aggregation: " + err)
+         }else{
+         console.log("the results are below!!!! \n \n \n " )
+         console.log(result)
+         res.json(result)
+         }
+     })
+
+      
+});
+
+
+
+
+router.get('/api/workouts/range', function (req, res) {
+  db.Workout.find({}, (err, data) => {
         if (err) {
             console.log("Database Error:" + err)
         } else {
-
+            // let newDataArr = data.slice(0,7)
+            console.log(data)
+            console.log(data.length)
             res.json(data)
+            
         }
     });
-
+    
     
 
 });
 
-// router.get('/api/workouts', function(req,res){
-
-//     db.workouts.find().sort({day: -1}, (err, data )=>{
-//         if (err){
-//             console.log("Database Error:" + err)
-//         }else{
-
-//         res.json(data)
-//         }
-//     });
-
-// });
-
-
 
 router.post('/api/workouts', function (req, res) {
-    const { body } = req.body
-    db.workouts.insert({ body }, (err, data) => {
+    
+    db.Workout.create({}, (err, data) => {
         if (err) {
-            console.log("Database Error: " + err)
+            console.log("Database Error in post route: " + err)
         } else {
             res.json(data)
         }
-    })
+    });
+    
 })
 
 router.put('/api/workouts/:id', function (req, res) {
@@ -74,23 +88,17 @@ router.put('/api/workouts/:id', function (req, res) {
     const id = req.params.id
     console.log(JSON.stringify(workout))
     console.log(id)
-    // db.workouts.findByIdAndUpdate({},(err,data)=>{
-    //     if(err) {
-    //         console.log("the error is: " + err)
-    //     } else{
-    //         console.log(data)
-    //     }
-    // });
-    db.workouts.findByIdAndUpdate({ _id: mongojs.ObjectID(id) }, { workout }, { new: true }, (err, data) => {
+ 
+    db.Workout.update({ _id: id }, { $push: { exercises: workout }}, { new: true }, (err, data) => {
         if (err) {
-            console.log("Database Error: " + err)
+            console.log("Database Error in put route: " + err)
         } else {
             res.json(data)
         }
-    })       
+    })   
+
     
- 
-    
+   
 });
 
 
