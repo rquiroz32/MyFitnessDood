@@ -5,10 +5,15 @@ This was a homework assignment for my Rutgers Coding Bootcamp course. We were pr
 ## Table of Contents
 
 *[Installation](#installation)
+
 *[Usage](#usage)
+
 *[Contributing](#Contributing)
+
 *[Questions](#Questions)
+
 *[Link](#Link)
+
 *[License](#License)
 
 
