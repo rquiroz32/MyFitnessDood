@@ -7,7 +7,6 @@ This was a homework assignment for my Rutgers Coding Bootcamp course. We were pr
 *[Installation](#installation)
 *[Usage](#usage)
 *[Contributing](#Contributing)
-*[Testing](#Testing)
 *[Questions](#Questions)
 *[License](#License)
 
@@ -20,8 +19,6 @@ Feel free to use for whatever you need without my prior knowledge or permission
 
 ## Contributing
 To report bugs or suggest enhancements please use my contact info listed further down below
-
-## Testing
 
 
 ## Questions
