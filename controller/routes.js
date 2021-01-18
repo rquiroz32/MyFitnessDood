@@ -3,7 +3,15 @@ const router = express.Router();
 const path = require('path')
 const mongoose = require('mongoose')
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+mongoose.connect(
+    process.env.MONGODB_URI || 'mongodb://localhost/workout',
+    {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+      useFindAndModify: false
+    }
+  );
 
 const db = require("../models");
 
@@ -24,6 +32,8 @@ router.get('/exercise', function (req, res) {
 router.get('/stats', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/stats.html'))
 })
+
+
 
 /////// BEGIN API ROUTES //////////
 
@@ -58,14 +68,12 @@ router.get('/api/workouts/range', function (req, res) {
         if (err) {
             console.log("Database Error:" + err)
         } else {
-            // let newDataArr = data.slice(0,7)
             console.log(data)
             console.log(data.length)
             res.json(data)
             
         }
-    });
-    
+    });   
     
 
 });
@@ -79,8 +87,7 @@ router.post('/api/workouts', function (req, res) {
         } else {
             res.json(data)
         }
-    });
-    
+    });    
 })
 
 router.put('/api/workouts/:id', function (req, res) {
@@ -95,9 +102,7 @@ router.put('/api/workouts/:id', function (req, res) {
         } else {
             res.json(data)
         }
-    })   
-
-    
+    })      
    
 });
 
