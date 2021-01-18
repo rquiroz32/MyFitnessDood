@@ -70,7 +70,9 @@ router.get('/api/workouts/range', function (req, res) {
         } else {
             console.log(data)
             console.log(data.length)
-            res.json(data)
+            let newDataArr = data.slice(0,7)
+            console.log(newDataArr)
+            res.json(newDataArr)
             
         }
     });   
